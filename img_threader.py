@@ -4,6 +4,15 @@ import concurrent.futures
 
 ## Add URL List Here ## 
 
+def randomNum_gen():
+    start = .1   # inclusive
+    end = .8    # exclusive
+    n = 8    # size -- coorleate to 8 max cores, could double tthe time if 4 cores. 
+    rand_int = random.uniform(range(start, end), k=n)
+    rand_float = rand_int/10
+    print(rand_float)
+
+    return rand_float
 img_urls = [
  'https://unsplash.com/photos/LVWfjwm_duM'
  'https://unsplash.com/photos/6uneKLGrJPs'
@@ -35,5 +44,7 @@ def download_image(img_url):
                                                  
                                                  
 with concurrent.futures.ThreadPoolExecutor() as executor: 
-    executor.map()
+    rand_float = randomNum_gen 
+    executor.map(download_image, rand_float)
+                                                 
                                                  
