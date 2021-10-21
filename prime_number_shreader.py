@@ -881,9 +881,6 @@ try:
 
 
 
-
-
-
     def worker():
         for index in PRIMES_TEST_RANGE:
             logging.info("Main    : create and start thread %d.", index)
@@ -938,6 +935,103 @@ except Exception as f:
     traceback.print_exc()
     print(str(f))
 
+    
+    
+    
+    ##################### START OF GITHUB CHANGES ################################
+    ##############################################################################
+
+
+display_header()
+display_header2()
+print(),print()
+
+current_time98 = time.time()
+current_time99 = time.ctime(current_time98)
+print(f"{'X' * 50}".center(width))
+print(f"{'X' * 50}".center(width))
+
+print(f' :: Starting Test on {bblue}THREAD-POOL multi-threaded ITERATION Range Iterator{reset} :: '.center(width))
+print(f'{blue}This is Multi-Threading,{red}Multi-Threaded, with ThreadPoolExecutor{reset} and effeciant will depend on the Test Algo.{reset}'.center(
+    width))
+print(f'starting: {yellow}[{current_time98}]{reset}'.center(width))
+print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+print(f"{'X' * 50}".center(width))
+print(f"{'X' * 50}".center(width))
+time.sleep(5), print(), print()
+
+    
+#### Another way to do thread pooling #####
+
+ ## start of sequence
+try: 
+    pass
+    threads = list()
+
+    current_time44 = time.time()
+    current_time65 = time.ctime(current_time44)
+    print(f"{'X' * 50}".center(width))
+    print(f"{'X' * 50}".center(width))
+    print(f' :: Starting Test on {bblue}Multi-Threaded ITERATION Range Iterator{reset} {red} DAEMON ON {reset}:: '.center(width))
+    print(
+        f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
+            width))
+    print(f'starting: {yellow}[{current_time44}]{reset}'.center(width))
+    print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+    print(f"{'X' * 50}".center(width))
+    print(f"{'X' * 50}".center(width))
+    time.sleep(5), print(), print()
+    
+   
+##Body ##### 
+
+
+## end
+
+print(), print()
+        print('X' * 50)
+        print('X' * 50)
+        print()
+        end45 = time.time()
+        cry_time45 = time.ctime(end45)
+        end_time45 = end65 - current_time45
+        print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+        print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
+        print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
+        print(f'Task  completed in: {yellow}[{end_time45}{reset}]')
+        print(f'Task  completed at: {yellow}[{cry_time45}{reset}]')
+        print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
+        print(f'Time To Complete Task {red}[{end_time45}]{reset} Seconds')
+        print('X' * 50)
+        print('X' * 50)
+        print()
+        print(' :: Killing Threads:: ')
+        print(f'Checking For Alive Threads'.center(width))
+        print(f"d.isAlive(), {d0.is_alive()}")
+        print(f"d.isAlive(), {t0.is_alive()}")
+        print('X' * 50)
+        print('X' * 50)
+        print(f'{bblue} Moving on to next iteration {reset}'.center(width))
+
+        time.sleep(7)
+        clear()
+
+
+
+
+
+
+except Exception as f:
+    traceback.print_exc()
+    print(str(f))
+
+    
+    
+    
+    
+    
+    
+    
     #    with Pool(2) as p:
     #       r = list(tqdm.tqdm(p.imap(functions.iter_list, PRIMES_TEST_RANGE), total=PRIME_TEST_LEN))
     # for i in tqdm(range(PRIMES_TEST_RANGE)):
