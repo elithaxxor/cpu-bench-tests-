@@ -984,9 +984,65 @@ try:
     
    
 ##Body ##### 
+#random - create random foat gen for 
 
+def randomNum_gen():
+    start = .1   # inclusive
+    end = .8    # exclusive
+    n = 8    # size -- coorleate to 8 max cores, could double tthe time if 4 cores. 
+    rand_int = random.uniform(range(start, end), k=n)
+    rand_float = rand_int/10
+    print(rand_float)
 
-## end
+    return rand_float
+    
+   
+def threading_function(rand_float) 
+    print(f'Sleeping for {rand_float} Seconds.')
+    time.sleep(seconds) 
+    return f'Done Sleeping {rand_float}'
+    
+    
+
+    ## Tread pool with executor.submit
+with concurrent.futures.ThreadPoolExecutor() as executor: 
+    rand_sec = randomNum_gen()
+    results = [executor.submit(threading_function, rand_sec) for x in range (PRIMES_TEST_RANGE)]
+        for f in concurrent.futures.as_completed(results): 
+            print(f"xxx{x} ## xxxx {f.results()}".center(width))
+       
+    
+  ## thread pool with executor.map (mapping the thread to function) 
+    ## map returns the order in which thread was run 
+with concurrent.futures.ThreadPoolExecutor() as executor: 
+    rand_sec = randomNum_gen()
+    results = executor.map(threading_function, rand_sec) 
+    
+    for result in results: 
+        print(result) 
+    
+          
+    
+    
+    
+
+  
+    
+  #  Manual Threading / Reading theads 
+  #  f1 = executor.submit(threading_function, rand_sec) ## -< future object (to receive single thread. delete later.) 
+  #    print(f1.results())
+  #    print(f2.resutls()) 
+  #  f2 = executor.submit(threading_function, rand_sec) #
+  #  print (f1.result()) 
+  #  print (f2.result()) 
+    
+    
+
+    
+    
+    
+## end of sequence 
+#########
 
 print(), print()
         print('X' * 50)
