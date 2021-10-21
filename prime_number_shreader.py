@@ -964,6 +964,17 @@ time.sleep(5), print(), print()
 #### Another way to do thread pooling #####
 
  ## start of sequence
+    
+def randomNum_gen():
+    start = .1   # inclusive
+    end = .8    # exclusive
+    n = 8    # size -- coorleate to 8 max cores, could double tthe time if 4 cores. 
+    rand_int = random.uniform(range(start, end), k=n)
+    rand_float = rand_int/10
+    print(rand_float)
+
+    return rand_float
+
 try: 
     pass
     threads = list()
@@ -986,15 +997,7 @@ try:
 ##Body ##### 
 #random - create random foat gen for 
 
-def randomNum_gen():
-    start = .1   # inclusive
-    end = .8    # exclusive
-    n = 8    # size -- coorleate to 8 max cores, could double tthe time if 4 cores. 
-    rand_int = random.uniform(range(start, end), k=n)
-    rand_float = rand_int/10
-    print(rand_float)
 
-    return rand_float
     
    
 def threading_function(rand_float) 
@@ -1020,12 +1023,6 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
     
     for result in results: 
         print(result) 
-    
-          
-    
-    
-    
-
   
     
   #  Manual Threading / Reading theads 
@@ -1035,11 +1032,6 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
   #  f2 = executor.submit(threading_function, rand_sec) #
   #  print (f1.result()) 
   #  print (f2.result()) 
-    
-    
-
-    
-    
     
 ## end of sequence 
 #########
@@ -1073,13 +1065,41 @@ print(), print()
         clear()
 
 
+except Exception as f:
+    traceback.print_exc()
+    print(str(f))
+    
+
+try: 
+    def randomNum_genII():
+    start = .1   # inclusive
+    end = .8    # exclusive
+    n = 8    # size -- coorleate to 8 max cores, could double tthe time if 4 cores. 
+    rand_int = random.uniform(range(start, end), k=n)
+    rand_float = rand_int/10
+    print(rand_float)
+
+    return rand_float
 
 
+    def threading_functionII(rand_float) 
+        print(f'Sleeping for {rand_float} Seconds.')
+        time.sleep(seconds) 
+        return f'Done Sleeping {rand_float}'
 
+    
+    print(f' :: Starting Multi-Processing Module :: '.center(width()) 
+    with concurrent.ProcessPoolExecutor() as executor: 
+          ## the submit submits the execute function. it is best used for submitting just one thread 
+          rand_floatII = randNum_genII()
+          f1 = executor.submit(threading_functionII, rand_floatII) 
+           
 
 except Exception as f:
     traceback.print_exc()
     print(str(f))
+
+    
 
     
     
