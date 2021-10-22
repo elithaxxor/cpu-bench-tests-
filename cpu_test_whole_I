@@ -25,6 +25,50 @@ import IPCHECKER as IPx
 from IPCHECKER import *
 from subprocess import call
 
+import threading
+import ctypes
+import time
+
+## class thread with exception
+class thread_with_exception(threading.Thread):
+    def __init__(self, name):
+        threading.Thread.__init__(self)
+        self.name = name
+
+    def run(self):
+
+        # target function of the thread class
+        try:
+            while True:
+                print('running ' + self.name)
+        finally:
+            print('ended')
+
+    def get_id(self):
+
+        # returns id of the respective thread
+        if hasattr(self, '_thread_id'):
+            return self._thread_id
+        for id, thread in threading._active.items():
+            if thread is self:
+                return id
+
+    def raise_exception(self):
+        thread_id = self.get_id()
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
+                                                         ctypes.py_object(SystemExit))
+        if res > 1:
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
+            print('Exception raise failure')
+
+
+# t1 = thread_with_exception('Thread 1')
+# t1.start()
+# time.sleep(2)
+# t1.raise_exception()
+# t1.join()
+#
+
 
 class Colors:
     reset = "\033[0m"
@@ -98,7 +142,6 @@ def display_header2():
     print(' :: ITERATOR - MULTI THREADING w/out Daemon  :: '.center(width))
 
 
-
 def display_header3():
     print(
         '\t\t \033 The program calculates prime #s using Threading, Hyperthreading (if available), Multi-Threading & Multi-Processsing.\033 \n'
@@ -113,13 +156,12 @@ def display_header3():
 
     print(' :: Testing Order:: '.center(width))
     print(' :: PRIME ITERATOR - WITH THREADING - SINGLE CORE:: '.center(width))
-    print(' :: PRIME ITERATOR - MULTI THREADING  :: '.center(width))
+    print(' :: CONCURRENT THREAD POOL EXECUTOR - PRIME TEST  :: '.center(width))
     print(' :: PRIME ITERATOR - ASYNCIO (EVENT LOOPING) :: '.center(width))
     print(' :: PRIME ITERATOR - (Difficult) MULTI THREADING w/out Daemon  :: '.center(width))
     print(' :: PRIME ITERATOR - MULTI Processing w/out Daemon  :: '.center(width))
     print(' :: PRIME ITERATOR - NO THREADING - SINGLE CORE :: '.center(width))
-    print('X' *50)
-
+    print('X' * 50)
 
 
 class LIST_FUNC():
@@ -541,7 +583,7 @@ try:
             print()
             print(f'Checking For Alive Threads'.center(width))
             t.terminate()
-         #   executor.shutdown()
+            #   executor.shutdown()
             print(f"d.isAlive(),{red} {t.is_alive()}{reset}")
             print('Moving on to iteration test, with single thread')
             TICKER += 1
@@ -584,7 +626,7 @@ print(
         width))
 
 display_header()
-display_header2()
+display_header3()
 print(f' :: Starting Test on {bblue}ASYNC ITERATION Range Iterator{reset} :: '.center(width))
 time.sleep(8)
 clear()
@@ -739,7 +781,7 @@ try:
     print('X' * 50)
     print(' :: Killing Threads:: ')
     print(f'Checking For Alive Threads'.center(width))
-   # executor.shutdown()
+    # executor.shutdown()
     t.terminate()
     w.terminate()
     w2.terminate()
@@ -852,7 +894,7 @@ try:
     print()
     print(' :: Killing Threads:: ')
     print(f'Checking For Alive Threads'.center(width))
-    executor.shutdown()
+   # executor.shutdown()
     print(f"d.isAlive(), {d0.is_alive()}")
     print(f"d.isAlive(), {t0.is_alive()}")
     print('X' * 50)
@@ -950,8 +992,8 @@ try:
         print()
         print(' :: Killing Threads:: ')
         print(f'Checking For Alive Threads'.center(width))
-        print(f"d.isAlive(), {d0.is_alive()}")
-        print(f"d.isAlive(), {t0.is_alive()}")
+        print(f"x.isAlive(), {x.is_alive()}")
+       # print(f"d.isAlive(), {t0.is_alive()}")
         print('X' * 50)
         print('X' * 50)
         print(f'{bblue} Moving on to next iteration {reset}'.center(width))
@@ -1009,90 +1051,90 @@ def threading_function():
 
 
 try:
-    threads = list()
+    with Spinner():
+        threads = list()
+        current_time44 = time.time()
+        current_time65 = time.ctime(current_time44)
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        print(
+            f' :: Starting Test on {bblue}Multi-Threaded ITERATION Range Iterator{reset} {red} DAEMON ON {reset}:: '.center(
+                width))
+        print(
+            f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
+                width))
+        print(f'starting: {yellow}[{current_time44}]{reset}'.center(width))
+        print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        time.sleep(5)
+        # print()
 
-    current_time44 = time.time()
-    current_time65 = time.ctime(current_time44)
-    print(f"{'X' * 50}".center(width))
-    print(f"{'X' * 50}".center(width))
-    print(
-        f' :: Starting Test on {bblue}Multi-Threaded ITERATION Range Iterator{reset} {red} DAEMON ON {reset}:: '.center(
-            width))
-    print(
-        f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
-            width))
-    print(f'starting: {yellow}[{current_time44}]{reset}'.center(width))
-    print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
-    print(f"{'X' * 50}".center(width))
-    print(f"{'X' * 50}".center(width))
-    time.sleep(5)
-    # print()
+        ##Body #####
+        # random - create random foat gen for
 
-    ##Body #####
-    # random - create random foat gen for
-
-    ## Tread pool with executor.submit
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-        rand_sec = randomNum_gen()
-        # results = [executor.submit(threading_function, rand_sec) for x in PRIMES_TEST_RANGE]
-        # for f in concurrent.futures.as_completed(results):
-        #     print(f"xxx{x} ## xxxx {f.results()}".center(width))
-
-        for x in PRIMES_TEST_RANGE:
+        ## Tread pool with executor.submit
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
             rand_sec = randomNum_gen()
-            results = [executor.submit(threading_function, rand_sec)]
+            # results = [executor.submit(threading_function, rand_sec) for x in PRIMES_TEST_RANGE]
+            # for f in concurrent.futures.as_completed(results):
+            #     print(f"xxx{x} ## xxxx {f.results()}".center(width))
 
-            for future in futures.as_completed(results):
-                print(future)
+            for x in PRIMES_TEST_RANGE:
+                rand_sec = randomNum_gen()
+                results = [executor.submit(threading_function, rand_sec)]
 
-        ## thread pool with executor.map (mapping the thread to function)
-        ## map returns the order in which thread was run
-        # with concurrent.futures.ThreadPoolExecutor() as executor:
-        #     rand_sec = randomNum_gen()
-        #     results = executor.map(threading_function, rand_sec)
-        #     for result in results:
-        #         print(result)
-        #
+                for future in futures.as_completed(results):
+                    print(future)
 
-        #  Manual Threading / Reading theads
-        #  f1 = executor.submit(threading_function, rand_sec) ## -< future object (to receive single thread. delete later.)
-        #    print(f1.results())
-        #    print(f2.resutls())
-        #  f2 = executor.submit(threading_function, rand_sec) #
-        #  print (f1.result())
-        #  print (f2.result())
+            ## thread pool with executor.map (mapping the thread to function)
+            ## map returns the order in which thread was run
+            # with concurrent.futures.ThreadPoolExecutor() as executor:
+            #     rand_sec = randomNum_gen()
+            #     results = executor.map(threading_function, rand_sec)
+            #     for result in results:
+            #         print(result)
+            #
 
-        ## end of sequence
-        #########
+            #  Manual Threading / Reading theads
+            #  f1 = executor.submit(threading_function, rand_sec) ## -< future object (to receive single thread. delete later.)
+            #    print(f1.results())
+            #    print(f2.resutls())
+            #  f2 = executor.submit(threading_function, rand_sec) #
+            #  print (f1.result())
+            #  print (f2.result())
 
-        print(), print()
-        print('X' * 50)
-        print('X' * 50)
-        print()
-        end45 = time.time()
-        cry_time45 = time.ctime(end45)
-        end_time45 = end45 - current_time44
-        print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
-        print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
-        print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
-        print(f'Task  completed in: {yellow}[{end_time45}{reset}]')
-        print(f'Task  completed at: {yellow}[{cry_time45}{reset}]')
-        print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
-        print(f'Time To Complete Task {red}[{end_time45}]{reset} Seconds')
-        print('X' * 50)
-        print('X' * 50)
-        print()
-        print(' :: Killing Threads:: ')
-        print(f'Checking For Alive Threads'.center(width))
-        executor.shutdown()
-        print(f"d.isAlive(), {d0.is_alive()}")
-        print(f"d.isAlive(), {t0.is_alive()}")
-        print('X' * 50)
-        print('X' * 50)
-        print(f'{bblue} Moving on to next iteration {reset}'.center(width))
+            ## end of sequence
+            #########
 
-        time.sleep(7)
-        clear()
+            print(), print()
+            print('X' * 50)
+            print('X' * 50)
+            print()
+            end45 = time.time()
+            cry_time45 = time.ctime(end45)
+            end_time45 = end45 - current_time44
+            print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+            print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
+            print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
+            print(f'Task  completed in: {yellow}[{end_time45}{reset}]')
+            print(f'Task  completed at: {yellow}[{cry_time45}{reset}]')
+            print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
+            print(f'Time To Complete Task {red}[{end_time45}]{reset} Seconds')
+            print('X' * 50)
+            print('X' * 50)
+            print()
+            print(' :: Killing Threads:: ')
+            print(f'Checking For Alive Threads'.center(width))
+            executor.shutdown()
+            print(f"d.isAlive(), {d0.is_alive()}")
+            print(f"d.isAlive(), {t0.is_alive()}")
+            print('X' * 50)
+            print('X' * 50)
+            print(f'{bblue} Moving on to next iteration {reset}'.center(width))
+
+            time.sleep(7)
+            clear()
 
 
 except Exception as f:
@@ -1118,68 +1160,69 @@ def threading_functionIII(rand_float):
 
 
 try:
-    current_time20 = time.time()
-    current_time21 = time.ctime(current_time20)
-    print(f"{'X' * 50}".center(width))
-    print(f"{'X' * 50}".center(width))
-    print(
-        f' :: Starting Test on {bblue}Multi-Threaded ITERATION Range Iterator{reset} {red} DAEMON ON {reset}:: '.center(
-            width))
-    print(
-        f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
-            width))
-    print(f'starting: {yellow}[{current_time21}]{reset}'.center(width))
-    print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
-    print(f"{'X' * 50}".center(width))
-    print(f"{'X' * 50}".center(width))
-    time.sleep(5)
-    # print()
+    with Spinner():
+        current_time20 = time.time()
+        current_time21 = time.ctime(current_time20)
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        print(
+            f' :: Starting Test on {bblue}Multi-Threaded ITERATION Range Iterator{reset} {red} DAEMON ON {reset}:: '.center(
+                width))
+        print(
+            f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
+                width))
+        print(f'starting: {yellow}[{current_time21}]{reset}'.center(width))
+        print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        time.sleep(5)
+        # print()
 
-    print(f' :: Starting Multi-Processing Module :: '.center(width))
-    print('####################### start of multi pool processing ################')
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        ## the submit submits the execute function. it is best used for submitting just one thread
-        for x in PRIMES_TEST_RANGE:
-            rand_floatIII = randomNum_genIII()
-            f1 = executor.submit(threading_functionIII, rand_floatIII)
-            print(f1.result)
+        print(f' :: Starting Multi-Processing Module :: '.center(width))
+        print('####################### start of multi pool processing ################')
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            ## the submit submits the execute function. it is best used for submitting just one thread
+            for x in PRIMES_TEST_RANGE:
+                rand_floatIII = randomNum_genIII()
+                f1 = executor.submit(threading_functionIII, rand_floatIII)
+                print(f1.result)
 
-        # for y in concurrent.futures.as_completed(f1):
-        #     print(y.result())
+            # for y in concurrent.futures.as_completed(f1):
+            #     print(y.result())
 
-        # print(f1.results)
+            # print(f1.results)
 
-        ## end of sequence
-        #########
+            ## end of sequence
+            #########
 
-        print(), print()
-        print('X' * 50)
-        print('X' * 50)
-        print()
-        end20 = time.time()
-        cry_time20 = time.ctime(end20)
-        end_time21 = end20 - current_time20
-        print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
-        print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
-        print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
-        print(f'Task  completed in: {yellow}[{end_time21}{reset}]')
-        print(f'Task  completed at: {yellow}[{cry_time20}{reset}]')
-        print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
-        print(f'Time To Complete Task {red}[{end_time21}]{reset} Seconds')
-        print('X' * 50)
-        print('X' * 50)
-        print()
-        print(' :: Killing Threads:: ')
-        print(f'Checking For Alive Threads'.center(width))
-        executor.shutdown()
-        print(f"d.isAlive(), {d0.is_alive()}")
-        print(f"d.isAlive(), {t0.is_alive()}")
-        print('X' * 50)
-        print('X' * 50)
-        print(f'{bblue} Moving on to next iteration {reset}'.center(width))
+            print(), print()
+            print('X' * 50)
+            print('X' * 50)
+            print()
+            end20 = time.time()
+            cry_time20 = time.ctime(end20)
+            end_time21 = end20 - current_time20
+            print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+            print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
+            print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
+            print(f'Task  completed in: {yellow}[{end_time21}{reset}]')
+            print(f'Task  completed at: {yellow}[{cry_time20}{reset}]')
+            print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
+            print(f'Time To Complete Task {red}[{end_time21}]{reset} Seconds')
+            print('X' * 50)
+            print('X' * 50)
+            print()
+            print(' :: Killing Threads:: ')
+            print(f'Checking For Alive Threads'.center(width))
+            executor.shutdown()
+            print(f"d.isAlive(), {d0.is_alive()}")
+            print(f"d.isAlive(), {t0.is_alive()}")
+            print('X' * 50)
+            print('X' * 50)
+            print(f'{bblue} Moving on to next iteration {reset}'.center(width))
 
-        time.sleep(7)
-        clear()
+            time.sleep(7)
+            clear()
 except Exception as f:
     traceback.print_exc()
     print(str(f))
@@ -1397,15 +1440,17 @@ print(
     "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
     print(f"".center(width))
 )
-#display_header()
+# display_header()
 display_header2()
 print(f'{bblue} This is the start of the prime # test {reset}'.center(width))
 time.sleep(5)
+
+
 #
 #
 # #### PRIME #S START
 
-def is_prime(n):
+def is_primeIII(n):
     if n < 2:
         return False
     if n == 2:
@@ -1418,6 +1463,17 @@ def is_prime(n):
         if n % i == 0:
             return False
     return True
+
+
+def check_sleep(amount):
+    with Spinner():
+        freq_count = 0
+        # print(f'\033[0;35m; [{amount}].. Gettting to Work [{amount}]\033[0;35;m'.center(width))
+        start = datetime.now()
+        time.sleep(amount)
+        end = datetime.now()
+        delta = end - start
+        return delta.seconds + delta.microseconds / 1000000
 
 
 PRIMES = PRIMES_TEST_RANGE
@@ -1470,20 +1526,22 @@ except Exception as f:
     #### #### ####     #### #### ####     #### #### ####     #### #### ####     #### #### ####
     #### #### ####     #### #### ####     #### #### ####     #### #### ####     #### #### ####
 
+
 def randomNum_genIIII():
     pass
 
 
 def main():
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        for number, prime in tqdm(zip(PRIMES_TEST_LIST, executor.map(is_prime,
+        for number, prime in tqdm(zip(PRIMES_TEST_LIST, executor.map(is_primeIII,
                                                                      PRIMES_TEST_LIST))):  # zip the list into a tuple, and map to function
             print('%d is prime: %s' % (number, prime))
 
     # if __name__ == '__main__':
     #      main()
 
-   # main()
+
+# main()
 
 def prime_threading():
     print(f'Sleeping for {rand_float} Seconds.')
@@ -1491,13 +1549,30 @@ def prime_threading():
     return f'Done Sleeping {rand_float}'
 
 
-
-try:
+try:  ## CONCURRENT THREAD POOL EXECUTOR - PRIME TEST  ##
     with Spinner():
-        start00 = time.time()
+        start000 = time.time()
+        threads = list()
+
+        current_time000 = time.ctime(start000)
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        print(
+            f' :: Starting Test on {bblue}## CONCURRENT THREAD POOL EXECUTOR - PRIME TEST  ## r{reset} {red} DAEMON ON {reset}:: '.center(
+                width))
+        print(
+            f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
+                width))
+        print(f'starting: {yellow}[{current_time000}]{reset}'.center(width))
+        print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        time.sleep(5)
+        # print()
+
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
             rand_secIIII = randomNum_gen()
-            for i, d in zip(PRIMES_TEST_RANGE, map(is_prime, PRIMES_TEST_RANGE)):
+            for i, d in zip(PRIMES_TEST_RANGE, map(is_primeIII, PRIMES_TEST_RANGE)):
                 results = executor.submit(prime_threading, rand_secIIII)
                 print('%d is prime: %s' % (i, d))  ## may have to chagne %d and %s
 
@@ -1509,7 +1584,7 @@ try:
         end00 = time.time()
         end_time00 = end00 - start00
         print(f'End time for multi/single threaded process, with [{threading.active_count()}] Active Threads')
-        print(end_time00)
+        print(end_time000)
         TICKER += 1
         time.sleep(3)
         id00 = threading.get_ident()
@@ -1517,6 +1592,33 @@ try:
 
         # id00 = threading.get_ident()
         # print('[TRHEAD ID]** ', id00)
+
+        print(), print()
+        print('X' * 50)
+        print('X' * 50)
+        print()
+        end000 = time.time()
+        cry_time001 = time.ctime(end000)
+        end_time21 = end000 - start000
+        print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+        print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
+        print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
+        print(f'Task  completed in: {yellow}[{end_time21}{reset}]')
+        print(f'Task  completed at: {yellow}[{cry_time20}{reset}]')
+        print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
+        print(f'Time To Complete Task {red}[{end_time21}]{reset} Seconds')
+        print('X' * 50)
+        print('X' * 50)
+        print()
+        print(' :: Killing Threads:: ')
+        print(f'Checking For Alive Threads'.center(width))
+        executor.shutdown()
+        print(f"d.isAlive(), {results.is_alive()}")
+        #  print(f"d.isAlive(), {t0.is_alive()}")
+        print('X' * 50)
+        print('X' * 50)
+        print(f'{bblue} Moving on to next iteration {reset}'.center(width))
+
 except Exception as f:
     traceback.print_exc()
     print(str(f))
@@ -1526,15 +1628,18 @@ except Exception as f:
 try:
     with Spinner():
         start05 = time.time()
-        for i, d in zip(PRIMES, map(is_prime, PRIMES)):
+        for i, d in zip(PRIMES, map(is_primeIII, PRIMES)):
             async def fetch_data02(PRIMES):
                 task = asyncio.create_task(read_data(PRIMES))
                 await task
                 await asyncio.sleep(.00000000000001)
 
+
             async def read_data(PRIMES):
                 print(PRIMES)
                 await asyncio.sleep(.00000000000001)
+
+
             print(i, d)
 
         end05 = time.time()
@@ -1550,7 +1655,6 @@ except Exception as f:
     traceback.print_exc()
     print(str(f))
 
-
 # ##### ###### ###### ##### ###### ########### ###### ########### ###### ########### ###### ########### ###### ########### ###### ######
 # ##### ###### ########### ###### ########### ###### ########### ###### ########### ###### ########### ###### ########### ###### ######
 # ##### ###### ########### ###### ########### ###### ########### ###### ########### ###### ########### ###### ########### ###### ######
@@ -1560,9 +1664,8 @@ except Exception as f:
 display_header()
 display_header2()
 
-
-
 time.sleep(5)
+
 
 def thread_function(name):
     logging.info("Thread %s: starting", name)
@@ -1570,7 +1673,6 @@ def thread_function(name):
     id00 = threading.get_ident()
     print(id00)
     logging.info("Thread %s: finishing", name)
-
 
 
 #### SIMPLE THREAD ### PRIME ##
@@ -1592,8 +1694,9 @@ try:
         time.sleep(5), print(), print()
 
         for i in PRIMES_TEST_RANGE:
-            t = threading.Thread(target=is_prime, args=(i,))
-            t.start()
+            t5 = threading.Thread(target=is_primeIII, args=(i,))
+            t5.start()
+
         print('main thread end!')
         # if action(is_prime):
         #     print('sucesses')
@@ -1604,7 +1707,7 @@ try:
         print()
         end001 = time.time()
         cry_time002 = time.ctime(end001)
-        end_time002= end001 - current_time001
+        end_time002 = end001 - current_time001
         print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
         print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
         print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
@@ -1617,9 +1720,9 @@ try:
         print()
         print(' :: Killing Threads:: ')
         print(f'Checking For Alive Threads'.center(width))
-        executor.shutdown()
-        print(f"d.isAlive(), {d0.is_alive()}")
-        print(f"d.isAlive(), {t0.is_alive()}")
+        # executor.shutdown()
+        print(f"d.isAlive(), {t5.is_alive()}")
+        # print(f"d.isAlive(), {t0.is_alive()}")
         print('X' * 50)
         print('X' * 50)
         print(f'{bblue} Moving on to next iteration {reset}'.center(width))
@@ -1631,19 +1734,18 @@ try:
 except IOError as f:
     print(str(f))
 
-
-try: ## MULTI PROCESSING ##
+try:  ## MULTI PROCESSING ##
     with Spinner():
         ## start sequence ##
-        current_time01 = time.time()
-        current_time02 = time.ctime(current_time01)
+        current_time011 = time.time()
+        current_time012 = time.ctime(current_time011)
         print(f"{'X' * 50}".center(width))
         print(f"{'X' * 50}".center(width))
         print(f' :: Starting Test on {bblue}MULTI PROCESSING ITERATION Range Iterator{reset} :: '.center(width))
         print(
             f'{blue}This is Multi-Threading,{red}Asyncio{reset} and effeciant will depend on the Test Algo.{reset}'.center(
                 width))
-        print(f'starting: {yellow}[{current_time01}]{reset}'.center(width))
+        print(f'starting: {yellow}[{current_time012}]{reset}'.center(width))
         print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
         print(f"{'X' * 50}".center(width))
         print(f"{'X' * 50}".center(width))
@@ -1651,7 +1753,7 @@ try: ## MULTI PROCESSING ##
 
         start01 = time.time()
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            for number, prime in tqdm(zip(PRIMES_TEST_LIST, executor.map(is_prime,
+            for number, prime in tqdm(zip(PRIMES_TEST_LIST, executor.map(is_primeIII,
                                                                          PRIMES_TEST_LIST))):  # zip the list into a tuple, and map to function
                 print('%d is prime: %s' % (number, prime))
 
@@ -1661,16 +1763,16 @@ try: ## MULTI PROCESSING ##
             print('X' * 50)
             print('X' * 50)
             print()
-            end20 = time.time()
-            cry_time20 = time.ctime(end20)
-            end_time21 = end20 - current_time20
+            end012 = time.time()
+            cry_time012 = time.ctime(end012)
+            end_time012 = end012 - current_time011
             print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
             print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
             print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
-            print(f'Task  completed in: {yellow}[{end_time21}{reset}]')
-            print(f'Task  completed at: {yellow}[{cry_time20}{reset}]')
+            print(f'Task  completed in: {yellow}[{end_time012}{reset}]')
+            print(f'Task  completed at: {yellow}[{cry_time012}"{reset}]')
             print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
-            print(f'Time To Complete Task {red}[{end_time21}]{reset} Seconds')
+            print(f'Time To Complete Task {red}[{end_time012}]{reset} Seconds')
             print('X' * 50)
             print('X' * 50)
             print()
@@ -1678,7 +1780,7 @@ try: ## MULTI PROCESSING ##
             print(f'Checking For Alive Threads'.center(width))
             executor.shutdown()
             print(f"d.isAlive(), {d0.is_alive()}")
-            print(f"d.isAlive(), {t0.is_alive()}")
+            # print(f"d.isAlive(), {t0.is_alive()}")
             print('X' * 50)
             print('X' * 50)
             print(f'{bblue} Moving on to next iteration {reset}'.center(width))
@@ -1692,10 +1794,26 @@ except Exception as f:
     traceback.print_exc()
     print(str(f))
 
+display_header3()
+print(f'{blue} MULTI PROCESSING (ld way) using logging Range Iterator {reset}'.center(width))
 
+try:  ### old way of setting up multi thread
+    current_time013 = time.time()
+    current_time014 = time.ctime(current_time013)
+    print(f"{'X' * 50}".center(width))
+    print(f"{'X' * 50}".center(width))
+    print(
+        f' :: Starting Test on {bblue}MULTI PROCESSING (ld way) using logging Range Iterator{reset} :: '.center(width))
+    print(
+        f'{blue}This is Multi-Threading,{red}Asyncio{reset} and effeciant will depend on the Test Algo.{reset}'.center(
+            width))
+    print(f'starting: {yellow}[{current_time014}]{reset}'.center(width))
+    print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+    print(f"{'X' * 50}".center(width))
+    print(f"{'X' * 50}".center(width))
+    time.sleep(5), print(), print()
 
-try: ### old way of setting up multi thread
-   # if __name__ == "__main__":
+    # if __name__ == "__main__":
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
@@ -1703,9 +1821,9 @@ try: ### old way of setting up multi thread
     start = time.time()
     logging.info("Main    : before creating thread")
 
-    X = threading.Thread(name='thread04', target=is_prime, args=(PRIMES_TEST_RANGE,))
+    X = threading.Thread(name='thread04', target=is_primeIII, args=(PRIMES_TEST_RANGE,))
 
-    for number, prime in zip(PRIMES, executor.map(is_prime, PRIMES)):
+    for number, prime in zip(PRIMES, executor.map(is_primeIII, PRIMES)):
         print('%d is prime: %s' % (number, prime))
         logging.info("Main    : before running thread")
         X.start()
@@ -1714,33 +1832,62 @@ try: ### old way of setting up multi thread
         X.join()
         logging.info("Main    : all done")
 
-    end = time.time()
-    end_time = end - start
-    cry_end = time.ctime(end)
-    print(f'End Time: [{cry_end}]')
-    print(f'Time to complete:  [{end_time}]')
+    end014 = time.time()
+    end_time014 = end014 - start014
+    cry_end014 = time.ctime(end014)
+    print(f'End Time: [{cry_end014}]')
+    print(f'Time to complete:  [{end_time014}]')
     TICKER += 1
+
+    ## END SEQUENCE ##
+
+    ## end sequence
+
+    print(), print()
+    print('X' * 50)
+    print('X' * 50)
+    print()
+    end012 = time.time()
+    cry_time012 = time.ctime(end012)
+    end_time012 = end012 - current_time011
+    print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+    print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
+    print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
+    print(f'Task  completed in: {yellow}[{end_time012}{reset}]')
+    print(f'Task  completed at: {yellow}[{cry_time012}"{reset}]')
+    print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
+    print(f'Time To Complete Task {red}[{end_time012}]{reset} Seconds')
+    print('X' * 50)
+    print('X' * 50)
+    print()
+    print(' :: Killing Threads:: ')
+    print(f'Checking For Alive Threads'.center(width))
+   #fexecutor.shutdown()
+   # print(f"d.isAlive(), {d0.is_alive()}")
+    # print(f"d.isAlive(), {t0.is_alive()}")
+    print('X' * 50)
+    print('X' * 50)
+    print(f'{bblue} Moving on to next iteration {reset}'.center(width))
 
 except Exception as f:
     traceback.print_exc()
     print(str(f))
 
-
-try: ## complex way of starting thread
+display_header3()
+print(f'{blue} Complex Multi-Threaded PRIME iterator  {reset}'.center(width))
+try:  ## complex way of starting thread
     ## start of sequence
     threads = list()
 
-    current_time65 = time.time()
-    current_time66 = time.ctime(current_time65)
+    current_time065 = time.time()
+    current_time066 = time.ctime(current_time065)
     print(f"{'X' * 50}".center(width))
     print(f"{'X' * 50}".center(width))
     print(
-        f' :: Starting Test on {bblue}Multi-Threaded ITERATION Range Iterator{reset} {red} DAEMON ON {reset}:: '.center(
+        f' :: Starting Test on {bblue} Complex Multi-Threaded PRIME iterator {reset} {red} DAEMON ON {reset}:: '.center(
             width))
-    print(
-        f' Multi-Threading,{red}NOT USING ThreadPoolExecutor to handle time-slicing. {reset} \n  {bblue}Effeciancy will depend on the Test Algo.{reset}'.center(
-            width))
-    print(f'starting: {yellow}[{current_time65}]{reset}'.center(width))
+
+    print(f'starting: {yellow}[{current_time065}]{reset}'.center(width))
     print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
     print(f"{'X' * 50}".center(width))
     print(f"{'X' * 50}".center(width))
@@ -1775,16 +1922,17 @@ try: ## complex way of starting thread
         print('X' * 50)
         print('X' * 50)
         print()
-        end65 = time.time()
-        cry_time65 = time.ctime(end65)
-        end_time65 = end65 - current_time65
-        print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+        end065 = time.time()
+        cry_time065 = time.ctime(end065)
+        end_time065 = end065 - current_time065
+
+        print(f'{bblue} Complex Multi-Threaded PRIME iterator {bblue}'.center(width))
         print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
         print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
-        print(f'Task  completed in: {yellow}[{end_time65}{reset}]')
-        print(f'Task  completed at: {yellow}[{cry_time65}{reset}]')
+        print(f'Task  completed in: {yellow}[{end_time065}{reset}]')
+        print(f'Task  completed at: {yellow}[{cry_time065}{reset}]')
         print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
-        print(f'Time To Complete Task {red}[{end_time65}]{reset} Seconds')
+        print(f'Time To Complete Task {red}[{end_time065}]{reset} Seconds')
         print('X' * 50)
         print('X' * 50)
         print()
@@ -1803,11 +1951,109 @@ except Exception as f:
     traceback.print_exc()
     print(str(f))
 
-
-
 ############################# START OF MULTI PROCESSING
 
+display_header3()
+print(f'[{TICKER}] ::{blue} Starting multi-processing with daemon on {reset} :: [{TICKER}] '.center(width))
+print(f'[{TICKER}] ::{blue} Starting multi-processing with daemon on {reset} :: [{TICKER}]  '.center(width))
 
+
+def randomNum_genIII():
+    start = 1  # inclusive
+    end = 8  # exclusive
+    n = 8  # size -- coorleate to 8 max cores, could double tthe time if 4 cores.
+    rand_int = random.random()
+    rand_float = rand_int / 10  # see line 1072
+    print(rand_float)
+
+    return rand_float
+
+
+def threading_functionIIII(rand_float):
+    print(f'Sleeping for {rand_float} Seconds.')
+    time.sleep(seconds)
+    return f'Done Sleeping {rand_float}'
+
+
+try:
+    current_time201 = time.time()
+    current_time202 = time.ctime(current_time201)
+    with Spinner():
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+
+        print(f'starting: {yellow}[{current_time202}]{reset}'.center(width))
+        print(f'\t\t [TEST RANGE:]  {PRIMES_TEST_RANGE}'.center(width))
+        print(f"{'X' * 50}".center(width))
+        print(f"{'X' * 50}".center(width))
+        time.sleep(5), print(), print()
+
+        print(f'[{TICKER}] ::{blue} Starting multi-processing with daemon on {reset} :: [{TICKER}]  '.center(width))
+        for i, d in zip(PRIMES, map(is_primeIII, PRIMES)):
+            rand_floatIII = randomNum_genIIII()
+            f1 = executor.submit(threading_functionIIII, rand_floatIIII)
+            print(f1.result)
+
+        # for y in concurrent.futures.as_completed(f1):
+        #     print(y.result())
+
+        # print(f1.results)
+
+        ## end of sequence
+        #########
+
+        print(), print()
+        print('X' * 50)
+        print('X' * 50)
+        print()
+        end201 = time.time()
+        cry_time201 = time.ctime(end201)
+        end_time201 = end201 - current_time201
+        print(f'{bblue}Multi-Threaded Iteration With Thread Pool Results: {bblue}'.center(width))
+        print(f'The Test Range : {yellow}[{PRIMES_TEST_RANGE}{reset}]')
+        print(f'Thread Count: [{yellow}{threading.active_count()}{reset}')
+        print(f'Task  completed in: {yellow}[{end_time201}{reset}]')
+        print(f'Task  completed at: {yellow}[{cry_time201}{reset}]')
+        print(f'Thread Count: [{red}{threading.active_count()}{reset}]')
+        print(f'Time To Complete Task {red}[{end_time201}]{reset} Seconds')
+        print('X' * 50)
+        print('X' * 50)
+        print()
+        print(' :: Killing Threads:: ')
+        print(f'Checking For Alive Threads'.center(width))
+       # executor.shutdown()
+        print(f"d.isAlive(), {d0.is_alive()}")
+        print(f"d.isAlive(), {t0.is_alive()}")
+        print('X' * 50)
+        print('X' * 50)
+        print(f'{bblue} Moving on to next iteration {reset}'.center(width))
+
+        time.sleep(7)
+        clear()
+
+
+except Exception as ef:
+    traceback.print_exc()
+    print(str(ef))
+
+
+print(f'{red} -- END OF SEQUENCE -- {reset} ')
+sys.exit(1)
+
+# def wait_on_future():
+#     f = executor.submit(pow, 5, 2)
+#     # This will never complete because there is only one worker thread and
+#     # it is executing this function.
+#     print(f.result())
+#
+# executor = ThreadPoolExecutor(max_workers=1)
+# executor.submit(wait_on_future)
+#
+#
+# # establish paralell task
+# def task_iseven(num00):
+#     for num00 in var_list:
+#         return num00
 
 #
 # ##### ###### ###### ##### ###### ########### ###### ########### ###### ########### ###### ########### ###### ########### ###### ######
@@ -1886,20 +2132,6 @@ except Exception as f:
 #
 #
 #
-# def wait_on_future():
-#     f = executor.submit(pow, 5, 2)
-#     # This will never complete because there is only one worker thread and
-#     # it is executing this function.
-#     print(f.result())
-#
-# executor = ThreadPoolExecutor(max_workers=1)
-# executor.submit(wait_on_future)
-#
-#
-# # establish paralell task
-# def task_iseven(num00):
-#     for num00 in var_list:
-#         return num00
 
 
 #
