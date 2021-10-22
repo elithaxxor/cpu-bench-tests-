@@ -98,6 +98,30 @@ def display_header2():
     print(' :: ITERATOR - MULTI THREADING w/out Daemon  :: '.center(width))
 
 
+
+def display_header3():
+    print(
+        '\t\t \033 The program calculates prime #s using Threading, Hyperthreading (if available), Multi-Threading & Multi-Processsing.\033 \n'
+        '\t\t Too High of a range will result in CPU hangup / over-utilization'
+        '\t\t \033[1;34;40m Bright Blu Stay off Drugs Kidz, mmkay? \033[1;34;40m \033[0m 1;34;40m]'
+        '\t\t: '), print(), print('\t\t\t', )
+    print(f"{'X' * 50}".center(width))
+    print('X' * 150)
+    print('X' * 150)
+    print(f"{'X' * 50}".center(width))
+    print(), print()
+
+    print(' :: Testing Order:: '.center(width))
+    print(' :: PRIME ITERATOR - WITH THREADING - SINGLE CORE:: '.center(width))
+    print(' :: PRIME ITERATOR - MULTI THREADING  :: '.center(width))
+    print(' :: PRIME ITERATOR - ASYNCIO (EVENT LOOPING) :: '.center(width))
+    print(' :: PRIME ITERATOR - (Difficult) MULTI THREADING w/out Daemon  :: '.center(width))
+    print(' :: PRIME ITERATOR - MULTI Processing w/out Daemon  :: '.center(width))
+    print(' :: PRIME ITERATOR - NO THREADING - SINGLE CORE :: '.center(width))
+    print('X' *50)
+
+
+
 class LIST_FUNC():
     def __init__(self, delay=None):
         is_prime0 = self.is_prime0
@@ -1187,7 +1211,11 @@ except Exception as f:
 ##########################################
 ##########################################
 ##########################################
-
+hash_pattern()
+display_header()
+display_header2()
+print(), print()
+time.sleep(3)
 try:
     with Spinner():
         print(f'[{[TICKER]}][## STARTING CPU VARIANCE CALCULATION ##[{[TICKER]}]\t\t'.center(width))
@@ -1666,8 +1694,6 @@ except Exception as f:
 
 
 
-
-
 try: ### old way of setting up multi thread
    # if __name__ == "__main__":
     format = "%(asctime)s: %(message)s"
@@ -1700,7 +1726,7 @@ except Exception as f:
     print(str(f))
 
 
-try: ## complex way of starting thread 
+try: ## complex way of starting thread
     ## start of sequence
     threads = list()
 
