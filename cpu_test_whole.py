@@ -379,7 +379,14 @@ try:
     current_version = platform.release()
     system_info = platform.platform()
     os_name0 = platform.system()
-
+    
+    # new adds 
+    big_names = platform.uname()
+    processor = platform.processor()
+    architecture = platform.architecture()
+    user_id = os.uname()
+    login = os.getlogin()
+    os.access(cwd)
     clear()
 
     display_header()
@@ -393,9 +400,18 @@ try:
     print(f'\033[1;35;m [{current_version}]  ...? '.center(width))
     print(f'\033[1;35;m [{os_name0}] + [{terminal}] ...? '.center(width))
     print(f'\033[1;35;m [{system_info}]  ...? '.center(width))
+    print(f'\033[1;35;0m [{big_names}]  ...? '.center(width))  ### ADDD YOUR IP
+    print(f'\033[1;35;0m [{processor}]  ...? '.center(width))  ### ADDD YOUR IP
+    print(f'\033[1;35;0m [{architecture}]  ...? '.center(width))  ### 
+    print(f'\033[1;35;0m [{user_id}]  ...? '.center(width))  ### 
+    print(f'\033[1;35;0m [{login}]  ...? '.center(width))  ### 
     print(f'\033[1;35;0m [{current_version}]  ...? '.center(width))  ### ADDD YOUR IP
-    print(f'\033[1;35;0m [{IP}]  ...? '.center(width))  ### ADDD YOUR IP
 
+
+    
+    
+    
+    
     print('X' * 150)
     print('X' * 150)
 
