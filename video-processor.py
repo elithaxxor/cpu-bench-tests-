@@ -1,16 +1,204 @@
-import ffmpeg, sys, numpy, traceback, time, os
+import ffmpeg, sys, numpy, traceback, time, os, platform, threading, subprocess
+from subprocess import call
 #from rich import print
 #pip install ffmpeg-python
 
 
+def OS_info():
+    global width; width = os.get_terminal_size().columns
+    terminal = os.environ.get('TERM')
+    #width_len = len(width)
+    cwd = os.getcwd()
+    #  IP_INFO = f"\033[1;35;0m {IPx.IP}"
+    current_version = platform.release(); system_info = platform.platform(); os_name0 = platform.system(); current_platform = platform.system()
+    platform_name = sys.platform; big_names = platform.uname(); processor = platform.processor(); architecture = platform.architecture(); user_id = os.uname() ;login = os.getlogin()
+    print()
+    print('X' * 50)
+    print(f'**[SYSTEM INFO]**'.center(width))
+    print()
+    print(f'\033[1;35;m [CURRENT_PLATFORM]--[{current_platform}]  ...? '.center(width))
+    print(f'\033[1;35;m [PLATFORM_NAME]--[{platform_name}]  ...? '.center(width))
+    print(f'\033[1;35;m [CURRENT_VERSION]--[{current_version}]  ...? '.center(width))
+    print(f'\033[1;35;m [OS-NAME]--[{os_name0}] + [{terminal}] ...? '.center(width))
+    print(f'\033[1;35;m [SYSTEM-INFO]--[{system_info}]  ...? '.center(width))
+    print(f'\033[1;35;0m [CURRENT-VERSION]--[{current_version}]  ...? '.center(width))
+    print(f'\033[1;35;0m [UUID]--[{big_names}]  ...? '.center(width))
+    print(f'\033[1;35;0m [PROCESSOR]--[{processor}]  ...? '.center(width))
+    print(f'\033[1;35;0m [ARCHITECTURE]--[{architecture}]  ...? '.center(width))
+    print(f'\033[1;35;0m [USER-ID]--[{user_id}]  ...? '.center(width))
+    print(f'\033[1;35;0m [LOGIN]--[{login}]  ...? '.center(width))
+    print('X' * 50)
+
+
+class Spinner:
+    busy = False
+    delay = 0.1
+
+    @staticmethod
+    def spinning_cursor():
+        while 1:
+            for cursor in '|/-\\': yield cursor
+
+    def __init__(self, delay=None):
+        self.spinner_generator = self.spinning_cursor()
+        if delay and float(delay): self.delay = delay
+
+    def spinner_task(self):
+        while self.busy:
+            sys.stdout.write(next(self.spinner_generator))
+            sys.stdout.flush()
+            time.sleep(self.delay)
+            sys.stdout.write('\b')
+            sys.stdout.flush()
+
+    def __enter__(self):
+        self.busy = True
+        threading.Thread(target=self.spinner_task).start()
+
+    def __exit__(self, exception, value, tb):
+        self.busy = False
+        time.sleep(self.delay)
+        if exception is not None:
+            return False
+
+def display_header():
+    # print('*' * 75)
+    color_red = Colors()
+    global red0
+    red0 = color_red.fgRed
+    global reset0
+    reset0 = color_red.reset
+    x = 'x'
+    print(f"{'X' * 125:^70}")
+    print(f"{'X' * 125:^70}")
+    pretty = f'{red0}xxx FILE-MOVER xxx{reset0}'.center(width)
+    print(f'{pretty : ^70}')
+    print(f"{'X' * 125: ^70}")
+
+    one = (
+        f'{bblue}[SCRIPT] *** A/V Converter *** {bblue}')
+    two = (
+        f'[USAGE] - [1] The Program will can: 1.] re-encode AV Conntainers to whatever format needed. IE- .MP4 -> .MOV')
+    three = (
+        f'[USAGE] - [2] Trim AV, with Min/Max Values && duration ')
+    four = (f'[USAGE] - [3] Compresses the AV, by rescaling resolution and resizing file')
+    five = (
+        f'[USAGE] - [5] Play Videos.{reset}')
+    six = (f'{red}[+]-[+] copyright material from Adel Al-Aali [+]-[+] {reset}')
+    seven = (f'[+] Future Addtion: Attach to OS.Listwalker and impliment Generator/text feed to auto convert large lists  [+]')
+
+    print(f"{one:^70}")
+    print(f"{two:^70}")
+    print(f"{three:^70}")
+    print(f"{four:^70}")
+    print(f"{five:^70}")
+    print(f"{six:^70}")
+    print(f"{seven:^70}")
+    print(f"{x * 20: ^70}")
+    print(), print()
+
+
+
+class Colors:
+    reset = "\033[0m"
+
+    # Black
+    fgBlack = "\033[30m"
+    fgBrightBlack = "\033[30;1m"
+    bgBlack = "\033[40m"
+    bgBrightBlack = "\033[40;1m"
+
+    # Red
+    fgRed = "\033[31m"
+    fgBrightRed = "\033[31;1m"
+    bgRed = "\033[41m"
+    bgBrightRed = "\033[41;1m"
+
+    # Green
+    fgGreen = "\033[32m"
+    fgBrightGreen = "\033[32;1m"
+    bgGreen = "\033[42m"
+    bgBrightGreen = "\033[42;1m"
+
+    # Yellow
+    fgYellow = "\033[33m"
+    fgBrightYellow = "\033[33;1m"
+    bgYellow = "\033[43m"
+    bgBrightYellow = "\033[43;1m"
+
+    # Blue
+    fgBlue = "\033[34m"
+    fgBrightBlue = "\033[34;1m"
+    bgBlue = "\033[44m"
+    bgBrightBlue = "\033[44;1m"
+    # Magenta
+    fgMagenta = "\033[35m"
+    fgBrightMagenta = "\033[35;1m"
+    bgMagenta = "\033[45m"
+    bgBrightMagenta = "\033[45;1m"
+    # Cyan
+    fgCyan = "\033[36m"
+    fgBrightCyan = "\033[36;1m"
+    bgCyan = "\033[46m"
+    bgBrightCyan = "\033[46;1m"
+    # White
+    fgWhite = "\033[37m"
+    fgBrightWhite = "\033[37;1m"
+    bgWhite = "\033[47m"
+    bgBrightWhite = "\033[47;1m"
+
+def period_wait():
+    period = ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']
+    # multi = [2,2,2,2,2,2,2,2,2,2]
+    period_len = len(period)
+    with Spinner():
+        for z, x in enumerate(period):
+            print(x)
+            time.sleep(.2)
+            if z <= period_len:
+                z += 1
+                print(f"{yellow}{x * z}{reset}")
+                continue
+            elif z == period_len:
+                break
+
+
+def clear():
+    # check and make call for specific operating system
+    os_name = platform.system()
+    _ = call('clear' if os_name == 'Linux' or 'Windows' or 'Darwin' else 'cls')
+
+
+
+###########
+color = Colors()
+spinner = Spinner()
+yellow = color.fgYellow
+red = color.fgRed
+blue = color.fgBlue
+bblue = color.fgBrightBlue
+cyan = color.fgCyan
+bg_background = color.bgBlack
+reset = color.reset
+def splash():
+    with Spinner():
+        display_header()
+        period_wait()
+        time.sleep(8)
+        clear()
+
+### display headers ##
+OS_info()
+time.sleep(5)
+clear()
+splash()
+
 class VideoEditor():
     def __init__(self):
-
         print(f'[+] Enter **[Desired]** File Name ex:: [sample.mp4], \n\t[+] Press Enter for default file_name [new_vid]\n')
         self.file00 = input('')
         if self.file00 == '':
             self.file00 = 'new_vid.mp4'
-
         self.cwd = os.getcwd()
         print(f" \n {'x'*50} \n [++] CWD :: \n \t [{self.cwd}][++]\n")
         self.vid_loc = input('[+] Enter Video Location')
@@ -203,6 +391,7 @@ try:
         print(f"{'X' * 50}\n")
     elif trimA in negative:
         print('[-] Passing -- [VIDEO-SCALER]')
+        splash()
         pass
 except Exception as e:
     print(f'[-] Error in Trim Parse \n \n [{e}] \t\t \n{traceback.print_exc()}')
